@@ -18,7 +18,7 @@ import { WhatsappWeb } from "./page-object/whatsapp-web.js";
     const whatsappPage = new WhatsappWeb(page);
 
     // accessing group
-    await whatsappPage.selectGroup('Cornos cada um na sua casa e acabou a amizade');
+    await whatsappPage.selectGroupOrConversation('Cornos cada um na sua casa e acabou a amizade');
     
     // mentioning someone on the message
     await whatsappPage.mentionSomeone('Vitão da Sayuri');
