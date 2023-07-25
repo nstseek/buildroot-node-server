@@ -16,7 +16,7 @@ export class WhatsappWeb {
         return this.page.getByRole('button', { name, exact: true });
     }
 
-    public selectGroup(groupName: string) {
+    public selectGroupOrConversation(groupName: string) {
         return this.page.getByText(groupName).click();
     }
 
