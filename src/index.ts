@@ -29,6 +29,8 @@ import { WhatsappWeb } from "./page-object/whatsapp-web.js";
     // sending the message
     await whatsappPage.send();
 
-    // closing the browser
-    await browser.close();
+    // closing the browser after a while so the message has enough time to be sent
+    setTimeout(() => {
+        browser.close();
+    }, 5000);
 })();
