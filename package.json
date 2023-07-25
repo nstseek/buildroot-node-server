@@ -1,7 +1,7 @@
 {
-  "name": "tmp-playwright",
+  "name": "whatsapp-web-bot",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "build/index.js",
   "license": "MIT",
   "type": "module",
   "dependencies": {
@@ -12,5 +12,8 @@
   "devDependencies": {
     "@playwright/test": "^1.36.2"
   },
-  "scripts": {}
+  "scripts": {
+    "install": "playwright install",
+    "start": "npm run install && tsc && node build/index.js"
+  }
 }
