@@ -6,14 +6,9 @@
   "type": "module",
   "dependencies": {
     "playwright": "^1.36.2",
-    "prettier": "^3.0.0",
     "typescript": "^5.1.6"
   },
-  "devDependencies": {
-    "@playwright/test": "^1.36.2"
-  },
   "scripts": {
-    "install": "playwright install",
-    "start": "npm run install && tsc && node build/index.js"
+    "start": "tsc && node build/index.js"
   }
 }
