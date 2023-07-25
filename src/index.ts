@@ -1,23 +1,34 @@
 import { chromium } from "playwright";
+import { WhatsappWeb } from "./page-object/whatsapp-web.js";
 
 (async () => {
+    // defining userDataDir
     const userDataDir = `C:\\Users\\NSTSeek\\AppData\\Local\\Google\\Chrome\\User Data`;
 
+    // opening browser
     const browser = await chromium.launchPersistentContext(userDataDir, { headless: false });
 
+    // creating page
     const page = await browser.newPage();
 
-    // recording
-
+    // navigating to whatsapp web
     await page.goto('https://web.whatsapp.com/');
-    await page.getByText('Cornos cada um na sua casa e acabou a amizade').click();
 
+    // creating page object
+    const whatsappPage = new WhatsappWeb(page);
 
-    for (let i = 0; i < 100; i++) {
-        await page.getByTestId('conversation-compose-box-input').type('@v');
-        await page.getByRole('button', { name: 'Vitão da Sayuri', exact: true }).click();
-        await page.getByTestId('compose-btn-send').click();
-    }
+    // accessing group
+    await whatsappPage.selectGroup('Cornos cada um na sua casa e acabou a amizade');
+    
+    // mentioning someone on the message
+    await whatsappPage.mentionSomeone('Vitão da Sayuri');
 
-    // end of records
+    // adding some text
+    await whatsappPage.inputText('eoque');
+
+    // sending the message
+    await whatsappPage.send();
+
+    // closing the browser
+    await browser.close();
 })();
