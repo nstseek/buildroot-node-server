@@ -1,5 +1,5 @@
-import { Page } from "playwright";
-import { normalizeToAscii } from "../utils/normalize.js";
+import { Page } from 'playwright';
+import { normalizeToAscii } from '../utils/normalize.js';
 
 export class WhatsappWeb {
     constructor(private page: Page) {}
@@ -7,17 +7,22 @@ export class WhatsappWeb {
     private getInputField() {
         return this.page.getByTestId('conversation-compose-box-input');
     }
-    
-    private getSendButton () {
+
+    private getSendButton() {
         return this.page.getByTestId('compose-btn-send');
     }
 
     private getMentionButton(name: string) {
-        return this.page.getByRole('button', { name, exact: true });
+        return this.page
+            .getByTestId('conversation-panel-wrapper')
+            .getByRole('button', { name, exact: true });
     }
 
     public selectGroupOrConversation(groupName: string) {
-        return this.page.getByText(groupName).click();
+        return this.page
+            .getByTestId('cell-frame-title')
+            .getByText(groupName)
+            .click();
     }
 
     public async inputText(text: string) {

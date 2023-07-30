@@ -1,12 +1,14 @@
-import { chromium } from "playwright";
-import { WhatsappWeb } from "./page-object/whatsapp-web.js";
+import { chromium } from 'playwright';
+import { WhatsappWeb } from './page-object/whatsapp-web.js';
 
 (async () => {
     // defining userDataDir
     const userDataDir = `C:\\Users\\NSTSeek\\AppData\\Local\\Google\\Chrome\\User Data`;
 
     // opening browser
-    const browser = await chromium.launchPersistentContext(userDataDir, { headless: false });
+    const browser = await chromium.launchPersistentContext(userDataDir, {
+        headless: false,
+    });
 
     // creating page
     const page = await browser.newPage();
@@ -18,13 +20,13 @@ import { WhatsappWeb } from "./page-object/whatsapp-web.js";
     const whatsappPage = new WhatsappWeb(page);
 
     // accessing group
-    await whatsappPage.selectGroupOrConversation('Cornos cada um na sua casa e acabou a amizade');
-    
-    // mentioning someone on the message
-    await whatsappPage.mentionSomeone('Vitão da Sayuri');
+    await whatsappPage.selectGroupOrConversation('Family Group');
 
     // adding some text
-    await whatsappPage.inputText('eoque');
+    await whatsappPage.inputText('Hey');
+
+    // mentioning someone on the message
+    await whatsappPage.mentionSomeone('John Doe');
 
     // sending the message
     await whatsappPage.send();
