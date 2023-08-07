@@ -1,4 +1,4 @@
-import { Journey } from './availability.types.js';
+import { AvailabilityResponse, Journey } from './availability.types.js';
 
 type JourneyPrice = {
     price: number;
@@ -8,22 +8,33 @@ type JourneyPrice = {
     arrivalDate: string;
     originAirport: string;
     destinyAirport: string;
+    duration: Journey['identifier']['duration'];
 };
 
 export const availabilityRoute =
     'https://b2c-api.voeazul.com.br/tudoAzulReservationAvailability/api/tudoazul/reservation/availability/v4/availability';
 
 export const findJourneyPrice = (journey: Journey): JourneyPrice => {
-    const level = journey.fares[0].paxPoints[1].levels[0];
+    const { money, points } = journey.fares[0].paxPoints[1].levels[0];
+
+    const {
+        flightNumber,
+        sta,
+        std,
+        arrivalStation,
+        departureStation,
+        duration,
+    } = journey.identifier;
 
     return {
-        price: level.money,
-        points: level.points,
-        flightNumber: journey.identifier.flightNumber,
-        arrivalDate: journey.identifier.sta,
-        departureDate: journey.identifier.std,
-        destinyAirport: journey.identifier.arrivalStation,
-        originAirport: journey.identifier.departureStation,
+        flightNumber,
+        duration,
+        points,
+        price: money,
+        arrivalDate: sta,
+        departureDate: std,
+        destinyAirport: arrivalStation,
+        originAirport: departureStation,
     };
 };
 
@@ -53,10 +64,16 @@ export const findJourneyByFlightNumber = ({
         (journey) => journey.identifier.flightNumber === flightNumber,
     );
 
-export const getCheapestJourney = (journeys: Journey[]) => {
+export const getCheapestJourneyPrice = (journeys: Journey[]) => {
     const journeyPrices = getJourneyPrices(journeys);
 
     const cheapestJourneyPrice = findCheapestJourney(journeyPrices);
+
+    return cheapestJourneyPrice;
+};
+
+export const getCheapestJourney = (journeys: Journey[]) => {
+    const cheapestJourneyPrice = getCheapestJourneyPrice(journeys);
 
     const cheapestJourney = findJourneyByFlightNumber({
         flightNumber: cheapestJourneyPrice.flightNumber,
@@ -64,4 +81,15 @@ export const getCheapestJourney = (journeys: Journey[]) => {
     });
 
     return cheapestJourney;
+};
+
+export const getCheapestRoundTripJourneyPrices = (
+    availabilityJson: AvailabilityResponse,
+) => {
+    const [firstTrip, secondTrip] = availabilityJson.data.trips;
+
+    return {
+        ida: getCheapestJourneyPrice(firstTrip.journeys),
+        volta: getCheapestJourneyPrice(secondTrip.journeys),
+    };
 };
