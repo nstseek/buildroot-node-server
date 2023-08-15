@@ -4,6 +4,7 @@ import { connect } from './setup/mongodb/connect-database.js';
 import { logInfo, logSuccess } from './utils/log/index.js';
 import { router } from './routes/index.js';
 import { routeLogger } from './utils/route-logger/index.js';
+import { errorMiddleware } from './utils/error-middleware/error-middleware.js';
 
 const app = express();
 const port = process.env.PORT;
@@ -17,6 +18,10 @@ logSuccess('Middlewares successfully configured!');
 logInfo('Setting up routes...');
 app.use(router);
 logSuccess('Routes successfully configured!');
+
+logInfo('Setting up error handler...');
+app.use(errorMiddleware);
+logSuccess('Error handler successfully configured!');
 
 (async function () {
     logInfo('Connecting to MongoDB database...');

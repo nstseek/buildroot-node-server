@@ -9,6 +9,8 @@
 // @grant        none
 // ==/UserScript==
 
+import { AvailabilityCrawlerResponse } from '../routes/availability-crawler/schema/response.js';
+
 // This should run in your browser when the selecao voo page is loading
 // The azul flight crawler server must be running in port 3000
 // You'll see the output in the server's terminal output (for now)
@@ -33,7 +35,6 @@
                     writable: false,
                 });
                 if (this.readyState === 4) {
-                    console.log(this.response);
                     fetch(
                         'http://localhost:3000/availability-crawler/extract-and-save',
                         {
@@ -43,16 +44,18 @@
                             },
                             body: this.response, // Convert the data object to a JSON string
                         },
-                    );
+                    )
+                        .then((response) => response.json())
+                        .then((data: AvailabilityCrawlerResponse) => {
+                            if (data.nextUrl) {
+                                window.location.href = data.nextUrl;
+                            }
+                        });
                 }
             } else {
                 originalOnreadystatechange.apply(this, arguments as any);
             }
         };
-
-        if (isAvailabilityRequest) {
-            console.log(this, arguments);
-        }
 
         originalXMLHttpRequestOpen.apply(this, arguments as any);
     };
