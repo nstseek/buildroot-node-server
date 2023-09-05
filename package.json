@@ -1,6 +1,9 @@
 {
-    "name": "azul-flight-crawler",
+    "name": "buildroot-node-server",
     "version": "1.0.0",
+    "engines": {
+        "node": "^16.0.0"
+    },
     "main": "build/index.js",
     "license": "MIT",
     "type": "module",
@@ -13,7 +16,7 @@
         "typescript": "^5.1.6"
     },
     "scripts": {
-        "build": "tsc && node post-build.js",
+        "build": "tsc",
         "serve": "dotenv -- node build/index.js",
         "start": "npm run build && npm run serve"
     },
